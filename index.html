@@ -1,123 +1,138 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Welcome, Stranger</title>
-  <style>
-    body {
-      margin: 0;
-      height: 100vh;
-      background: #1a0e0e;
-      color: white;
-      overflow: hidden;
-      font-family: Arial, sans-serif;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hello Friend</title>
+<style>
+body {
+    margin:0; padding:0;
+    height:100vh; display:flex; justify-content:center; align-items:center;
+    background: linear-gradient(135deg,#ffffff,#478552,#000000);
+    font-family: 'Courier New', monospace;
+}
 
-    /* Calvin Klein logo top-left */
-    .logo {
-      position: fixed;
-      top: 20px;
-      left: 20px;
-      font-size: 2rem;
-      font-weight: bold;
-      font-family: 'Helvetica Neue', sans-serif;
-      letter-spacing: -1px;
-    }
+.ck-logo {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    width: 80px;       /* adjust size */
+    height: auto;
+    z-index: 1000;
+}
 
-    /* Weapon wheel container */
-    .wheel {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 300px;
-      height: 300px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
 
-    .wheel a {
-      position: absolute;
-      text-decoration: none;
-      color: white;
-      font-size: 1.2rem;
-      font-weight: bold;
-      transition: transform 0.2s, color 0.2s;
-    }
+.weapon-wheel-container {
+    position: relative;
+    width: 400px; height: 400px;
+    border: none;
+}
 
-    /* Place 6 menu items in a circle */
-    .wheel a:nth-child(1) { transform: rotate(0deg) translate(140px) rotate(0deg); }
-    .wheel a:nth-child(2) { transform: rotate(60deg) translate(140px) rotate(-60deg); }
-    .wheel a:nth-child(3) { transform: rotate(120deg) translate(140px) rotate(-120deg); }
-    .wheel a:nth-child(4) { transform: rotate(180deg) translate(140px) rotate(-180deg); }
-    .wheel a:nth-child(5) { transform: rotate(240deg) translate(140px) rotate(-240deg); }
-    .wheel a:nth-child(6) { transform: rotate(300deg) translate(140px) rotate(-300deg); }
+.weapon-item {
+    position: absolute; width: 80px; height: 80px;
+    cursor: pointer; z-index:2;
+    display:flex; flex-direction:column; align-items:center;
+}
+.weapon-icon {
+    width:60px; height:60px;
+    border-radius:8px; border:2px solid #888;
+    background: rgba(0,0,0,0.7);
+    display:flex; align-items:center; justify-content:center;
+    font-size:24px; color:#ccc;
+    transition: all 0.2s ease;
+}
+.weapon-label {
+    margin-top:4px; font-size:12px; color:#888;
+    text-transform:uppercase; font-weight:bold;
+    transition: color 0.2s ease;
+}
+.weapon-item:hover .weapon-icon {
+    border-color:#ff0000; background: rgba(255,0,0,0.2);
+    color:#fff; box-shadow:0 0 20px rgba(255,0,0,0.6);
+}
+.weapon-item:hover .weapon-label { color:#ff0000; text-shadow:0 0 10px rgba(255,0,0,0.8); }
 
-    .wheel a:hover {
-      color: cyan;
-      animation: glitch 200ms infinite;
-    }
-
-    /* Glitch effect */
-    @keyframes glitch {
-      0% { transform: translate(0); }
-      20% { transform: translate(-2px, 2px); }
-      40% { transform: translate(2px, -2px); }
-      60% { transform: translate(-1px, 1px); }
-      80% { transform: translate(1px, -1px); }
-      100% { transform: translate(0); }
-    }
-
-    /* Grain overlay */
-    #grain {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      pointer-events: none;
-      mix-blend-mode: overlay;
-      opacity: 0.15;
-      z-index: 10;
-    }
-  </style>
+.center-circle {
+    position:absolute; top:50%; left:50%;
+    width:120px; height:120px; border-radius:50%;
+    transform:translate(-50%,-50%);
+    border:4px solid #888;
+    background: radial-gradient(circle, rgba(255,255,255,0.05), rgba(0,0,0,0.1));
+    z-index:1;
+}
+.crosshair {
+    position:absolute; top:50%; left:50%;
+    transform:translate(-50%,-50%);
+    width:20px; height:20px; z-index:3;
+}
+.crosshair::before, .crosshair::after {
+    content:''; position:absolute; background:#fff;
+}
+.crosshair::before { top:50%; left:0; width:100%; height:2px; transform:translateY(-50%); }
+.crosshair::after { left:50%; top:0; width:2px; height:100%; transform:translateX(-50%); }
+</style>
 </head>
 <body>
-  <div class="logo"><img src="CK.png" alt="Calvin Klein" height="40"></div>
+<img src="ck.png" alt="Calvin Klein" class="ck-logo">
 
-  <div class="wheel">
-    <a href="#home">Home</a>
-    <a href="#about">About</a>
-    <a href="#projects">Projects</a>
-    <a href="#blog">Blog</a>
-    <a href="#gallery">Gallery</a>
-    <a href="#contact">Contact</a>
-  </div>
+<div class="weapon-wheel-container">
+    <svg width="400" height="400" viewBox="0 0 400 400" style="position:absolute; top:0; left:0; z-index:0;">
+        <!-- 6 sectors -->
+        <g id="sectors" transform="translate(200,200)">
+            <path d="M0,0 L200,0 A200,200 0 0,1 100,173.2 Z" fill="transparent" stroke="rgba(255,255,255,0.3)" stroke-width="2"></path>
+            <path d="M0,0 L100,173.2 A200,200 0 0,1 -100,173.2 Z" fill="transparent" stroke="rgba(255,255,255,0.3)" stroke-width="2"></path>
+            <path d="M0,0 L-100,173.2 A200,200 0 0,1 -200,0 Z" fill="transparent" stroke="rgba(255,255,255,0.3)" stroke-width="2"></path>
+            <path d="M0,0 L-200,0 A200,200 0 0,1 -100,-173.2 Z" fill="transparent" stroke="rgba(255,255,255,0.3)" stroke-width="2"></path>
+            <path d="M0,0 L-100,-173.2 A200,200 0 0,1 100,-173.2 Z" fill="transparent" stroke="rgba(255,255,255,0.3)" stroke-width="2"></path>
+            <path d="M0,0 L100,-173.2 A200,200 0 0,1 200,0 Z" fill="transparent" stroke="rgba(255,255,255,0.3)" stroke-width="2"></path>
+        </g>
+    </svg>
 
-  <!-- Grain canvas -->
-  <canvas id="grain"></canvas>
+    <div class="center-circle">
+        <div class="crosshair"></div>
+    </div>
 
-  <script>
-    const canvas = document.getElementById("grain");
-    const ctx = canvas.getContext("2d");
+    <!-- Weapon items -->
+    <div class="weapon-item" data-sector="3"><div class="weapon-icon">👤</div><div class="weapon-label">About</div></div>
+    <div class="weapon-item" data-sector="4"><div class="weapon-icon">💼</div><div class="weapon-label">Portfolio</div></div>
+    <div class="weapon-item" data-sector="5"><div class="weapon-icon">⚡</div><div class="weapon-label">Skills</div></div>
+    <div class="weapon-item" data-sector="6"><div class="weapon-icon">📧</div><div class="weapon-label">Contact</div></div>
+    <div class="weapon-item" data-sector="1"><div class="weapon-icon">🚀</div><div class="weapon-label">Projects</div></div>
+    <div class="weapon-item" data-sector="2"><div class="weapon-icon">📝</div><div class="weapon-label">Blog</div></div>
 
-    function resize() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    }
-    resize();
-    window.onresize = resize;
+</div>
 
-    function drawGrain() {
-      let imageData = ctx.createImageData(canvas.width, canvas.height);
-      let buffer = new Uint32Array(imageData.data.buffer);
-      for (let i = 0; i < buffer.length; i++) {
-        buffer[i] = Math.random() < 0.5 ? 0xff000000 : 0xffffffff;
-      }
-      ctx.putImageData(imageData, 0, 0);
-      requestAnimationFrame(drawGrain);
-    }
-    drawGrain();
-  </script>
+<script>
+const items = document.querySelectorAll('.weapon-item');
+const sectorPaths = document.querySelectorAll('#sectors path');
+
+const container = document.querySelector('.weapon-wheel-container');
+const cx = container.clientWidth/2;
+const cy = container.clientHeight/2;
+const radius = 130;
+const n = items.length;
+
+items.forEach((item,i)=>{
+    const angle = (360/n)*i - 90; // start top
+    const rad = angle*Math.PI/180;
+    const x = cx + radius*Math.cos(rad) - item.offsetWidth/2;
+    const y = cy + radius*Math.sin(rad) - item.offsetHeight/2;
+    item.style.left = x+'px';
+    item.style.top = y+'px';
+    item.querySelector('.weapon-icon').style.transform='rotate(0deg)';
+
+    item.addEventListener('mouseenter', ()=>{
+        sectorPaths.forEach(p=>p.setAttribute('fill','transparent'));
+        const sectorIndex = (i + 4) % 6;
+        sectorPaths[sectorIndex].setAttribute('fill','rgba(255,0,0,0.3)');
+    });
+    item.addEventListener('mouseleave', ()=>{
+        sectorPaths.forEach(p=>p.setAttribute('fill','transparent'));
+    });
+
+    item.addEventListener('click', ()=>alert(item.querySelector('.weapon-label').textContent));
+});
+</script>
+
 </body>
 </html>
