@@ -1,10 +1,123 @@
-<html>
-    <head>
-        <title>
-            Welcome, stranger
-        </title>
-    </head>
-    <body background="rick.jpeg">
-        <h1>Hello, citizen of the internet.</h1>
-    </body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Welcome, Stranger</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background: #1a0e0e;
+      color: white;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+    }
+
+    /* Calvin Klein logo top-left */
+    .logo {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      font-size: 2rem;
+      font-weight: bold;
+      font-family: 'Helvetica Neue', sans-serif;
+      letter-spacing: -1px;
+    }
+
+    /* Weapon wheel container */
+    .wheel {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .wheel a {
+      position: absolute;
+      text-decoration: none;
+      color: white;
+      font-size: 1.2rem;
+      font-weight: bold;
+      transition: transform 0.2s, color 0.2s;
+    }
+
+    /* Place 6 menu items in a circle */
+    .wheel a:nth-child(1) { transform: rotate(0deg) translate(140px) rotate(0deg); }
+    .wheel a:nth-child(2) { transform: rotate(60deg) translate(140px) rotate(-60deg); }
+    .wheel a:nth-child(3) { transform: rotate(120deg) translate(140px) rotate(-120deg); }
+    .wheel a:nth-child(4) { transform: rotate(180deg) translate(140px) rotate(-180deg); }
+    .wheel a:nth-child(5) { transform: rotate(240deg) translate(140px) rotate(-240deg); }
+    .wheel a:nth-child(6) { transform: rotate(300deg) translate(140px) rotate(-300deg); }
+
+    .wheel a:hover {
+      color: cyan;
+      animation: glitch 200ms infinite;
+    }
+
+    /* Glitch effect */
+    @keyframes glitch {
+      0% { transform: translate(0); }
+      20% { transform: translate(-2px, 2px); }
+      40% { transform: translate(2px, -2px); }
+      60% { transform: translate(-1px, 1px); }
+      80% { transform: translate(1px, -1px); }
+      100% { transform: translate(0); }
+    }
+
+    /* Grain overlay */
+    #grain {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      mix-blend-mode: overlay;
+      opacity: 0.15;
+      z-index: 10;
+    }
+  </style>
+</head>
+<body>
+  <div class="logo"><img src="CK.png" alt="Calvin Klein" height="40"></div>
+
+  <div class="wheel">
+    <a href="#home">Home</a>
+    <a href="#about">About</a>
+    <a href="#projects">Projects</a>
+    <a href="#blog">Blog</a>
+    <a href="#gallery">Gallery</a>
+    <a href="#contact">Contact</a>
+  </div>
+
+  <!-- Grain canvas -->
+  <canvas id="grain"></canvas>
+
+  <script>
+    const canvas = document.getElementById("grain");
+    const ctx = canvas.getContext("2d");
+
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resize();
+    window.onresize = resize;
+
+    function drawGrain() {
+      let imageData = ctx.createImageData(canvas.width, canvas.height);
+      let buffer = new Uint32Array(imageData.data.buffer);
+      for (let i = 0; i < buffer.length; i++) {
+        buffer[i] = Math.random() < 0.5 ? 0xff000000 : 0xffffffff;
+      }
+      ctx.putImageData(imageData, 0, 0);
+      requestAnimationFrame(drawGrain);
+    }
+    drawGrain();
+  </script>
+</body>
 </html>
